@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#020b18">
+
+    <title>MY OCEAN // ABYSSAL INTERFACE</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+    <script src="script.js" defer></script>
+
+</head>
+
+<body class="home-page">
+
+    <!-- LOADING SCREEN -->
+    <div class="loader">
+
+        <div class="loader-core">
+
+            <div class="loader-ring"></div>
+
+            <div class="loader-symbol">
+                ◈
+            </div>
+
+            <div class="loader-title">
+                MY OCEAN
+            </div>
+
+            <div class="loader-subtitle">
+                INITIALIZING ABYSSAL INTERFACE
+            </div>
+
+            <div class="loader-progress">
+                <span></span>
+            </div>
+
+            <div class="loader-status">
+                SYSTEM ONLINE
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CURSOR -->
+    <div class="custom-cursor">
+
+        <div class="cursor-ring"></div>
+
+        <div class="cursor-coral">
+            ✦
+        </div>
+
+    </div>
+
+
+    <!-- ATMOSPHERE -->
+    <div class="ocean-world">
+
+        <div class="water-light"></div>
+
+        <div class="underwater-grid"></div>
+
+        <div class="deep-fog"></div>
+
+        <div class="particles"></div>
+
+        <div class="bubbles"></div>
+
+        <div class="fish-school"></div>
+
+        <div class="coral-field">
+            <div class="coral coral-one"></div>
+            <div class="coral coral-two"></div>
+            <div class="coral coral-three"></div>
+            <div class="coral coral-four"></div>
+        </div>
+
+    </div>
+
+
+    <!-- HUD CORNERS -->
+
+    <div class="hud hud-top-left">
+        <span>OCEAN.OS</span>
+        <small>EXPEDITION 026</small>
+    </div>
+
+    <div class="hud hud-top-right">
+        <span class="live-dot"></span>
+        LIVE
+    </div>
+
+
+    <!-- NAVBAR -->
+
+    <header class="main-header">
+
+        <nav class="navbar">
+
+            <a href="index.html"
+               class="brand">
+
+                <span class="brand-symbol">
+                    ◈
+                </span>
+
+                <span>
+                    MY<span>OCEAN</span>
+                </span>
+
+            </a>
+
+
+            <div class="nav-links">
+
+                <a href="index.html"
+                   class="active">
+                    HOME
+                </a>
+
+                <a href="profile.html">
+                    PROFILE
+                </a>
+
+                <a href="education.html">
+                    EDUCATION
+                </a>
+
+                <a href="hobby.html">
+                    HOBBIES
+                </a>
+
+                <a href="contact.html">
+                    CONTACT
+                </a>
+
+            </div>
+
+
+            <button class="theme-button"
+                    id="themeButton">
+
+                ◐
+
+            </button>
+
+        </nav>
+
+    </header>
+
+
+    <!-- DEPTH HUD -->
+
+    <aside class="depth-panel">
+
+        <div class="depth-label">
+            DEPTH
+        </div>
+
+        <div class="depth-number">
+            <span id="depthNumber">0</span>
+            <small>M</small>
+        </div>
+
+        <div class="depth-line">
+
+            <span id="depthFill"></span>
+
+        </div>
+
+        <div class="depth-range">
+            SURFACE
+            <span>4500M</span>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main>
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="system-tag">
+                    <span></span>
+                    DEEP SEA PERSONAL SYSTEM
+                </div>
+
+
+                <p class="hero-index">
+                    001 / DISCOVER
+                </p>
+
+
+                <h1>
+
+                    WELCOME
+                    <br>
+
+                    TO MY
+                    <span>OCEAN.</span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    Dive deeper than the surface.
+                    Discover my story, my education,
+                    my passions and the little things
+                    that make my world unique.
+
+                </p>
+
+
+                <div class="hero-buttons">
+
+                    <a href="profile.html"
+                       class="btn btn-primary">
+
+                        ENTER MY WORLD
+
+                        <span>→</span>
+
+                    </a>
+
+                    <a href="#explore"
+                       class="btn btn-ghost">
+
+                        EXPLORE DEPTH
+
+                    </a>
+
+                </div>
+
+
+                <div class="hero-data">
+
+                    <div>
+                        <small>STATUS</small>
+                        <strong>EXPLORING</strong>
+                    </div>
+
+                    <div>
+                        <small>LOCATION</small>
+                        <strong>THAILAND</strong>
+                    </div>
+
+                    <div>
+                        <small>MISSION</small>
+                        <strong>LEARN / CREATE</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ORB -->
+
+            <div class="hero-orb">
+
+                <div class="orb-ring orb-ring-one"></div>
+
+                <div class="orb-ring orb-ring-two"></div>
+
+                <div class="orb-core">
+
+                    <div class="orb-light"></div>
+
+                </div>
+
+                <div class="orb-label">
+                    OCEAN
+                    <br>
+                    CORE
+                </div>
+
+            </div>
+
+
+            <!-- SCROLL -->
+
+            <div class="scroll-indicator">
+
+                <span>SCROLL TO DIVE</span>
+
+                <div class="scroll-line"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- EXPLORE -->
+
+        <section class="section explore-section"
+                 id="explore">
+
+            <div class="section-heading reveal">
+
+                <div>
+
+                    <span class="section-number">
+                        002
+                    </span>
+
+                    <span class="section-kicker">
+                        SYSTEM MODULES
+                    </span>
+
+                </div>
+
+                <h2>
+                    EXPLORE
+                    <span>MY WORLD</span>
+                </h2>
+
+                <p>
+                    Every layer reveals something different.
+                </p>
+
+            </div>
+
+
+            <div class="module-grid">
+
+
+                <a href="profile.html"
+                   class="module-card tilt-card reveal">
+
+                    <div class="module-number">
+                        01
+                    </div>
+
+                    <div class="module-icon">
+                        ◉
+                    </div>
+
+                    <h3>
+                        PROFILE
+                    </h3>
+
+                    <p>
+                        Get to know the person
+                        behind this ocean.
+                    </p>
+
+                    <span class="module-arrow">
+                        ENTER →
+                    </span>
+
+                </a>
+
+
+                <a href="education.html"
+                   class="module-card tilt-card reveal">
+
+                    <div class="module-number">
+                        02
+                    </div>
+
+                    <div class="module-icon">
+                        △
+                    </div>
+
+                    <h3>
+                        EDUCATION
+                    </h3>
+
+                    <p>
+                        Explore my learning journey
+                        and future goals.
+                    </p>
+
+                    <span class="module-arrow">
+                        ENTER →
+                    </span>
+
+                </a>
+
+
+                <a href="hobby.html"
+                   class="module-card tilt-card reveal">
+
+                    <div class="module-number">
+                        03
+                    </div>
+
+                    <div class="module-icon">
+                        ✦
+                    </div>
+
+                    <h3>
+                        HOBBIES
+                    </h3>
+
+                    <p>
+                        Discover the things
+                        I enjoy doing.
+                    </p>
+
+                    <span class="module-arrow">
+                        ENTER →
+                    </span>
+
+                </a>
+
+
+                <a href="contact.html"
+                   class="module-card tilt-card reveal">
+
+                    <div class="module-number">
+                        04
+                    </div>
+
+                    <div class="module-icon">
+                        ◇
+                    </div>
+
+                    <h3>
+                        CONTACT
+                    </h3>
+
+                    <p>
+                        Establish a connection
+                        with my world.
+                    </p>
+
+                    <span class="module-arrow">
+                        ENTER →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUOTE -->
+
+        <section class="quote-section">
+
+            <div class="quote-orbit"></div>
+
+            <div class="quote-content reveal">
+
+                <span>
+                    DEPTH NOTE // 04
+                </span>
+
+                <h2>
+                    “The deeper you dive,
+                    the more you discover.”
+                </h2>
+
+                <p>
+                    — MY OCEAN
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div class="footer-main">
+
+            <div>
+
+                <div class="footer-brand">
+                    ◈ MY OCEAN
+                </div>
+
+                <p>
+                    Student Portfolio
+                    <br>
+                    Exploring my world,
+                    one wave at a time.
+                </p>
+
+            </div>
+
+
+            <div class="footer-status">
+
+                <span class="live-dot"></span>
+
+                OCEAN SYSTEM ONLINE
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 MY OCEAN
+            </span>
+
+            <span>
+                BUILT BELOW THE SURFACE
+            </span>
+
+        </div>
+
+    </footer>
+
+
+</body>
+</html>
