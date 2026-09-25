@@ -3545,3 +3545,94 @@ button {
     }
 
 }
+
+/* =========================================================
+   MUSIC BUTTON
+========================================================= */
+
+.music-button {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+
+    width: 54px;
+    height: 54px;
+
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.72);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    color: #6b416b;
+
+    font-size: 23px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(130, 75, 150, 0.22);
+
+    z-index: 9999;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+.music-button:hover {
+    transform:
+        translateY(-4px)
+        scale(1.06);
+
+    box-shadow:
+        0 12px 32px rgba(130, 75, 150, 0.35);
+}
+
+.music-button:active {
+    transform:
+        scale(0.92);
+}
+
+.music-button.is-playing {
+    animation:
+        musicPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 8px 25px
+            rgba(130, 75, 150, 0.22);
+    }
+
+    50% {
+        box-shadow:
+            0 8px 32px
+            rgba(255, 120, 210, 0.55);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .music-button {
+        right: 16px;
+        bottom: 16px;
+
+        width: 48px;
+        height: 48px;
+
+        font-size: 20px;
+    }
+
+}
