@@ -815,68 +815,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 });
-
 /* =========================================================
    MUSIC PLAYER
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const musicButton =
-        document.getElementById("musicToggle");
-
-    const music =
-        document.getElementById("backgroundMusic");
+    const musicButton = document.getElementById("musicToggle");
+    const music = document.getElementById("backgroundMusic");
 
     if (!musicButton || !music) {
+        console.log("ไม่พบปุ่มเพลงหรือไฟล์ audio");
         return;
     }
 
-    const MUSIC_TIME_KEY = "sweetMusicTime";
-    const MUSIC_STATE_KEY = "sweetMusicState";
-
-    /* -----------------------------
-       โหลดตำแหน่งเพลงเดิม
-    ----------------------------- */
-
-    try {
-
-        const savedTime =
-            localStorage.getItem(MUSIC_TIME_KEY);
-
-        if (savedTime) {
-            music.currentTime =
-                parseFloat(savedTime) || 0;
-        }
-
-    } catch (error) {
-        console.warn(
-            "ไม่สามารถโหลดตำแหน่งเพลงได้",
-            error
-        );
-    }
-
-
-    /* -----------------------------
-       อัปเดตปุ่ม
-    ----------------------------- */
-
     function updateMusicButton() {
 
-        if (!music.paused) {
-
-            musicButton.textContent = "🔊";
-
-            musicButton.setAttribute(
-                "aria-label",
-                "ปิดเพลง"
-            );
-
-            musicButton.classList.add(
-                "is-playing"
-            );
-
-        } else {
+        if (music.paused) {
 
             musicButton.textContent = "🎵";
 
@@ -888,109 +843,72 @@ document.addEventListener("DOMContentLoaded", () => {
             musicButton.classList.remove(
                 "is-playing"
             );
+
+        } else {
+
+            musicButton.textContent = "🔊";
+
+            musicButton.setAttribute(
+                "aria-label",
+                "ปิดเพลง"
+            );
+
+            musicButton.classList.add(
+                "is-playing"
+            );
         }
     }
 
 
-    /* -----------------------------
-       เปิดเพลง
-    ----------------------------- */
+    musicButton.addEventListener("click", async () => {
 
-    async function playMusic() {
-
-        try {
-
-            await music.play();
+        if (music.paused) {
 
             try {
-                localStorage.setItem(
-                    MUSIC_STATE_KEY,
-                    "playing"
+
+                await music.play();
+
+                updateMusicButton();
+
+                console.log("🎵 เพลงกำลังเล่น");
+
+            } catch (error) {
+
+                console.error(
+                    "เปิดเพลงไม่สำเร็จ:",
+                    error
                 );
-            } catch (_) {}
 
-            updateMusicButton();
+                alert(
+                    "เปิดเพลงไม่ได้ กรุณาตรวจสอบว่าไฟล์ MP3 อยู่โฟลเดอร์เดียวกับ index.html"
+                );
 
-        } catch (error) {
-
-            console.warn(
-                "ไม่สามารถเล่นเพลงอัตโนมัติได้",
-                error
-            );
-
-            updateMusicButton();
-        }
-    }
-
-
-    /* -----------------------------
-       ปิดเพลง
-    ----------------------------- */
-
-    function pauseMusic() {
-
-        music.pause();
-
-        try {
-
-            localStorage.setItem(
-                MUSIC_STATE_KEY,
-                "paused"
-            );
-
-        } catch (_) {}
-
-        updateMusicButton();
-    }
-
-
-    /* -----------------------------
-       ปุ่มเปิด / ปิด
-    ----------------------------- */
-
-    musicButton.addEventListener(
-        "click",
-        async () => {
-
-            if (music.paused) {
-
-                await playMusic();
-
-            } else {
-
-                pauseMusic();
             }
 
+        } else {
+
+            music.pause();
+
+            updateMusicButton();
+
+            console.log("⏸️ หยุดเพลง");
+
         }
-    );
 
+    });
 
-    /* -----------------------------
-       จำตำแหน่งเพลง
-    ----------------------------- */
 
     music.addEventListener(
-        "timeupdate",
-        () => {
-
-            try {
-
-                localStorage.setItem(
-                    MUSIC_TIME_KEY,
-                    String(
-                        music.currentTime
-                    )
-                );
-
-            } catch (_) {}
-
-        }
+        "play",
+        updateMusicButton
     );
 
 
-    /* -----------------------------
-       เพลงจบ → เล่นใหม่
-    ----------------------------- */
+    music.addEventListener(
+        "pause",
+        updateMusicButton
+    );
+
 
     music.addEventListener(
         "ended",
@@ -998,45 +916,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
             music.currentTime = 0;
 
-            playMusic();
+            updateMusicButton();
 
         }
     );
 
 
-    /* -----------------------------
-       ตรวจสถานะตอนเปิดหน้า
-    ----------------------------- */
+    music.addEventListener(
+        "error",
+        () => {
 
-    updateMusicButton();
-
-
-    /* -----------------------------
-       ถ้าเคยเปิดเพลงไว้
-       พยายามเล่นต่อ
-    ----------------------------- */
-
-    let savedState = null;
-
-    try {
-
-        savedState =
-            localStorage.getItem(
-                MUSIC_STATE_KEY
+            console.error(
+                "❌ โหลดไฟล์เพลงไม่ได้"
             );
 
-    } catch (_) {}
+            console.error(
+                music.error
+            );
 
-    /*
-     * เบราว์เซอร์มือถืออาจไม่อนุญาต
-     * autoplay ดังนั้นถ้า play()
-     * ถูกปฏิเสธ จะรอให้ผู้ใช้กดปุ่ม
-     */
+        }
+    );
 
-    if (savedState === "playing") {
 
-        playMusic();
-
-    }
+    updateMusicButton();
 
 });
