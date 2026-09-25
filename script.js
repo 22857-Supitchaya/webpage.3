@@ -815,3 +815,228 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 });
+
+/* =========================================================
+   MUSIC PLAYER
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const musicButton =
+        document.getElementById("musicToggle");
+
+    const music =
+        document.getElementById("backgroundMusic");
+
+    if (!musicButton || !music) {
+        return;
+    }
+
+    const MUSIC_TIME_KEY = "sweetMusicTime";
+    const MUSIC_STATE_KEY = "sweetMusicState";
+
+    /* -----------------------------
+       โหลดตำแหน่งเพลงเดิม
+    ----------------------------- */
+
+    try {
+
+        const savedTime =
+            localStorage.getItem(MUSIC_TIME_KEY);
+
+        if (savedTime) {
+            music.currentTime =
+                parseFloat(savedTime) || 0;
+        }
+
+    } catch (error) {
+        console.warn(
+            "ไม่สามารถโหลดตำแหน่งเพลงได้",
+            error
+        );
+    }
+
+
+    /* -----------------------------
+       อัปเดตปุ่ม
+    ----------------------------- */
+
+    function updateMusicButton() {
+
+        if (!music.paused) {
+
+            musicButton.textContent = "🔊";
+
+            musicButton.setAttribute(
+                "aria-label",
+                "ปิดเพลง"
+            );
+
+            musicButton.classList.add(
+                "is-playing"
+            );
+
+        } else {
+
+            musicButton.textContent = "🎵";
+
+            musicButton.setAttribute(
+                "aria-label",
+                "เปิดเพลง"
+            );
+
+            musicButton.classList.remove(
+                "is-playing"
+            );
+        }
+    }
+
+
+    /* -----------------------------
+       เปิดเพลง
+    ----------------------------- */
+
+    async function playMusic() {
+
+        try {
+
+            await music.play();
+
+            try {
+                localStorage.setItem(
+                    MUSIC_STATE_KEY,
+                    "playing"
+                );
+            } catch (_) {}
+
+            updateMusicButton();
+
+        } catch (error) {
+
+            console.warn(
+                "ไม่สามารถเล่นเพลงอัตโนมัติได้",
+                error
+            );
+
+            updateMusicButton();
+        }
+    }
+
+
+    /* -----------------------------
+       ปิดเพลง
+    ----------------------------- */
+
+    function pauseMusic() {
+
+        music.pause();
+
+        try {
+
+            localStorage.setItem(
+                MUSIC_STATE_KEY,
+                "paused"
+            );
+
+        } catch (_) {}
+
+        updateMusicButton();
+    }
+
+
+    /* -----------------------------
+       ปุ่มเปิด / ปิด
+    ----------------------------- */
+
+    musicButton.addEventListener(
+        "click",
+        async () => {
+
+            if (music.paused) {
+
+                await playMusic();
+
+            } else {
+
+                pauseMusic();
+            }
+
+        }
+    );
+
+
+    /* -----------------------------
+       จำตำแหน่งเพลง
+    ----------------------------- */
+
+    music.addEventListener(
+        "timeupdate",
+        () => {
+
+            try {
+
+                localStorage.setItem(
+                    MUSIC_TIME_KEY,
+                    String(
+                        music.currentTime
+                    )
+                );
+
+            } catch (_) {}
+
+        }
+    );
+
+
+    /* -----------------------------
+       เพลงจบ → เล่นใหม่
+    ----------------------------- */
+
+    music.addEventListener(
+        "ended",
+        () => {
+
+            music.currentTime = 0;
+
+            playMusic();
+
+        }
+    );
+
+
+    /* -----------------------------
+       ตรวจสถานะตอนเปิดหน้า
+    ----------------------------- */
+
+    updateMusicButton();
+
+
+    /* -----------------------------
+       ถ้าเคยเปิดเพลงไว้
+       พยายามเล่นต่อ
+    ----------------------------- */
+
+    let savedState = null;
+
+    try {
+
+        savedState =
+            localStorage.getItem(
+                MUSIC_STATE_KEY
+            );
+
+    } catch (_) {}
+
+    /*
+     * เบราว์เซอร์มือถืออาจไม่อนุญาต
+     * autoplay ดังนั้นถ้า play()
+     * ถูกปฏิเสธ จะรอให้ผู้ใช้กดปุ่ม
+     */
+
+    if (savedState === "playing") {
+
+        playMusic();
+
+    }
+
+});
