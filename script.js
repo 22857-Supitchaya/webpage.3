@@ -816,7 +816,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 /* =========================================================
-   MUSIC PLAYER
+   MUSIC PLAYER — เล่นต่อข้ามหน้า
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -824,27 +824,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const musicButton = document.getElementById("musicToggle");
     const music = document.getElementById("backgroundMusic");
 
-    if (!musicButton || !music) {
-        console.log("ไม่พบปุ่มเพลงหรือไฟล์ audio");
-        return;
+    if (!musicButton || !music) return;
+
+    const TIME_KEY = "oceanMusicTime";
+    const STATE_KEY = "oceanMusicState";
+
+    /* โหลดตำแหน่งเพลงเดิม */
+    try {
+        const savedTime = localStorage.getItem(TIME_KEY);
+
+        if (savedTime) {
+            music.currentTime = parseFloat(savedTime) || 0;
+        }
+    } catch (error) {
+        console.warn("โหลดตำแหน่งเพลงไม่ได้", error);
     }
 
-    function updateMusicButton() {
+    /* เปลี่ยนหน้าตาปุ่ม */
+    function updateButton() {
 
-        if (music.paused) {
-
-            musicButton.textContent = "🎵";
-
-            musicButton.setAttribute(
-                "aria-label",
-                "เปิดเพลง"
-            );
-
-            musicButton.classList.remove(
-                "is-playing"
-            );
-
-        } else {
+        if (!music.paused) {
 
             musicButton.textContent = "🔊";
 
@@ -853,91 +852,150 @@ document.addEventListener("DOMContentLoaded", () => {
                 "ปิดเพลง"
             );
 
-            musicButton.classList.add(
-                "is-playing"
+            musicButton.classList.add("is-playing");
+
+        } else {
+
+            musicButton.textContent = "🎵";
+
+            musicButton.setAttribute(
+                "aria-label",
+                "เปิดเพลง"
             );
+
+            musicButton.classList.remove("is-playing");
         }
     }
 
+    /* เล่นเพลง */
+    async function playMusic() {
 
+        try {
+
+            await music.play();
+
+            localStorage.setItem(
+                STATE_KEY,
+                "playing"
+            );
+
+            updateButton();
+
+        } catch (error) {
+
+            console.warn(
+                "เบราว์เซอร์ไม่อนุญาตให้เล่นอัตโนมัติ",
+                error
+            );
+
+            updateButton();
+        }
+    }
+
+    /* หยุดเพลง */
+    function pauseMusic() {
+
+        music.pause();
+
+        try {
+            localStorage.setItem(
+                STATE_KEY,
+                "paused"
+            );
+        } catch (error) {}
+
+        updateButton();
+    }
+
+    /* ปุ่มเพลง */
     musicButton.addEventListener("click", async () => {
 
         if (music.paused) {
 
-            try {
-
-                await music.play();
-
-                updateMusicButton();
-
-                console.log("🎵 เพลงกำลังเล่น");
-
-            } catch (error) {
-
-                console.error(
-                    "เปิดเพลงไม่สำเร็จ:",
-                    error
-                );
-
-                alert(
-                    "เปิดเพลงไม่ได้ กรุณาตรวจสอบว่าไฟล์ MP3 อยู่โฟลเดอร์เดียวกับ index.html"
-                );
-
-            }
+            await playMusic();
 
         } else {
 
-            music.pause();
-
-            updateMusicButton();
-
-            console.log("⏸️ หยุดเพลง");
-
+            pauseMusic();
         }
 
     });
 
+    /* จำตำแหน่งเพลงตลอดเวลา */
+    music.addEventListener("timeupdate", () => {
 
-    music.addEventListener(
-        "play",
-        updateMusicButton
-    );
+        try {
 
-
-    music.addEventListener(
-        "pause",
-        updateMusicButton
-    );
-
-
-    music.addEventListener(
-        "ended",
-        () => {
-
-            music.currentTime = 0;
-
-            updateMusicButton();
-
-        }
-    );
-
-
-    music.addEventListener(
-        "error",
-        () => {
-
-            console.error(
-                "❌ โหลดไฟล์เพลงไม่ได้"
+            localStorage.setItem(
+                TIME_KEY,
+                String(music.currentTime)
             );
 
-            console.error(
-                music.error
+        } catch (error) {}
+
+    });
+
+    /* ถ้าเพลงจบ ให้เริ่มใหม่ */
+    music.addEventListener("ended", () => {
+
+        music.currentTime = 0;
+
+        try {
+            localStorage.setItem(
+                TIME_KEY,
+                "0"
             );
+        } catch (error) {}
 
-        }
-    );
+        playMusic();
+    });
 
+    updateButton();
 
-    updateMusicButton();
+    /* =====================================================
+       พยายามเล่นต่ออัตโนมัติเมื่อเปลี่ยนหน้า
+    ===================================================== */
+
+    let savedState = null;
+
+    try {
+
+        savedState =
+            localStorage.getItem(STATE_KEY);
+
+    } catch (error) {}
+
+    if (savedState === "playing") {
+
+        /* พยายามเล่นทันที */
+        playMusic();
+
+        /* พยายามอีกครั้งหลังหน้าโหลด */
+        window.addEventListener("load", () => {
+
+            setTimeout(() => {
+                if (music.paused) {
+                    playMusic();
+                }
+            }, 300);
+
+        });
+
+        /* พยายามอีกครั้งเมื่อกลับมาที่หน้า */
+        document.addEventListener(
+            "visibilitychange",
+            () => {
+
+                if (
+                    document.visibilityState === "visible" &&
+                    music.paused
+                ) {
+                    playMusic();
+                }
+
+            }
+        );
+
+    }
 
 });
